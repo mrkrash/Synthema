@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Log in!{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div class="container is-max-desktop">
+        <div class="hero">
+            <div class="hero-body">
+                <figure class="image">
+                    <img src="{{ asset('images/Traveltrans-logo.png') }}" />
+                </figure>
+            </div>
+        </div>
+        <form method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3">
+                    {% trans with {'%name%': app.user.userIdentifier} %}You are logged in as %name% {% endtrans %}, <a href="{{ path('app_logout') }}">{% trans %}Logout{% endtrans %}</a>
+                </div>
+            {% endif %}
+
+            <h1 class="is-size-1 has-text-centered">{% trans %}Please sign in{% endtrans %}</h1>
+            <div class="field">
+                <label class="label" for="username">Email</label>
+                <div class="control">
+                    <input type="email" value="{{ last_username }}" name="_username" id="username" class="input" autocomplete="email" required autofocus>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="password">Password</label>
+                <div class="control">
+                    <input type="password" name="_password" id="password" class="input" autocomplete="current-password" required>
+                </div>
+            </div>
+
+            <button class="button is-primary is-large is-fullwidth" type="submit">
+                {% trans %}Sign in{% endtrans %}
+            </button>
+        </form>
+    </div>
+{% endblock %}
