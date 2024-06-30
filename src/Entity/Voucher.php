@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\VoucherStatus;
 use App\Repository\VoucherRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
@@ -29,7 +30,7 @@ class Voucher
     private ?bool $valid = null;
 
     #[ORM\Column]
-    private ?bool $used = null;
+    private ?VoucherStatus $status = null;
 
     public function getId(): ?int
     {
@@ -86,12 +87,17 @@ class Voucher
 
     public function isUsed(): ?bool
     {
-        return $this->used;
+        return $this->status == VoucherStatus::USED;
     }
 
-    public function setUsed(bool $used): static
+    public function getStatus(): ?VoucherStatus
     {
-        $this->used = $used;
+        return  $this->status;
+    }
+
+    public function setStatus(VoucherStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
