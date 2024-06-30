@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,11 +37,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Customer $customer = null;
 
-    #[ORM\Column(length: 15, nullable: true)]
-    private ?string $phone = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $notes = null;
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?UserInfo $info = null;
 
     public function getId(): ?int
     {
@@ -131,26 +127,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhone(): ?string
+    public function getInfo(): ?UserInfo
     {
-        return $this->phone;
+        return $this->info;
     }
 
-    public function setPhone(?string $phone): static
+    public function setInfo(?UserInfo $info): static
     {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getNotes(): ?string
-    {
-        return $this->notes;
-    }
-
-    public function setNotes(?string $notes): static
-    {
-        $this->notes = $notes;
+        $this->info = $info;
 
         return $this;
     }
